@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/invoices")
 @RequiredArgsConstructor
@@ -29,5 +31,10 @@ public class InvoiceController {
     @GetMapping("/{id}/link")
     public ResponseEntity<UrlResponse> generateInvoiceLink(@PathVariable Long id) {
         return ResponseEntity.ok(invoiceService.generateInvoiceLink(id));
+    }
+
+    @GetMapping("/{invoiceId}")
+    public ResponseEntity<InvoiceResponse> viewInvoice(@PathVariable UUID invoiceId){
+        return ResponseEntity.ok(invoiceService.viewInvoice(invoiceId));
     }
 }

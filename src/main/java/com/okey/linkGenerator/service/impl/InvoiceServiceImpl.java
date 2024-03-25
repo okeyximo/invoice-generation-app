@@ -47,33 +47,46 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         invoiceRepository.save(invoice);
 
-        List<InvoiceItemDto> invoiceItemDtos = invoice.getInvoiceItems().stream()
-                .map(invoiceItem -> InvoiceItemDto.builder()
-                        .description(invoiceItem.getDescription())
-                        .amount(invoiceItem.getAmount())
-                        .build())
-                .collect(Collectors.toList());
-
         return InvoiceResponse.builder()
                 .id(invoice.getId())
                 .invoiceNumber(invoice.getInvoiceNumber())
                 .totalAmount(invoice.getTotalAmount())
                 .dueDate(invoice.getDueDate())
-                .invoiceItems(invoiceItemDtos)
+                .invoiceItems(mapInvoiceItemsToDto(invoice.getInvoiceItems()))
                 .build();
     }
 
     @Override
-    public UrlResponse generateInvoiceLink(Long invoiceId) {
-        Invoice invoice = invoiceRepository.findById(invoiceId)
+    public UrlResponse generateInvoiceLink(Long id) {
+        Invoice invoice = invoiceRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid invoice ID"));
 
         if (invoice.getInvoiceLink() == null) {
-            String link = BASE_URL + "invoice/" + UUID.randomUUID();
-            invoice.setPaymentLink(link);
+            UUID invoiceId =  UUID.randomUUID();
+            String link = BASE_URL + "invoice/" + invoiceId;
+            invoice.setInvoiceLink(link);
             return UrlResponse.builder().url(link).build();
         } else {
             return UrlResponse.builder().url(invoice.getInvoiceLink()).build();
         }
+    }
+
+    @Override
+    public InvoiceResponse viewInvoice(UUID invoiceId) {
+        var invoice = invoiceRepository.findByInvoiceId(invoiceId);
+        return InvoiceResponse.builder()
+                .dueDate(invoice.getDueDate())
+                .invoiceNumber(invoice.getInvoiceNumber())
+                .invoiceItems(mapInvoiceItemsToDto(invoice.getInvoiceItems()))
+                .build();
+    }
+
+    private List<InvoiceItemDto> mapInvoiceItemsToDto(List<InvoiceItem> invoiceItems){
+        return invoiceItems.stream()
+                .map(invoiceItem -> InvoiceItemDto.builder()
+                        .description(invoiceItem.getDescription())
+                        .amount(invoiceItem.getAmount())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

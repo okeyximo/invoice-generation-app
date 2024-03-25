@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.okey.linkGenerator.dto.InvoiceItemDto;
 import com.okey.linkGenerator.dto.InvoiceRequest;
 import com.okey.linkGenerator.dto.InvoiceResponse;
+import com.okey.linkGenerator.dto.UrlResponse;
 import com.okey.linkGenerator.model.Invoice;
 import com.okey.linkGenerator.repository.InvoiceRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,9 +62,9 @@ public class InvoiceServiceImplTest {
 
         when(invoiceRepository.findById(invoiceId)).thenReturn(Optional.of(invoice));
 
-        String invoiceLink = invoiceService.generateInvoiceLink(invoiceId);
+        UrlResponse invoiceLink = invoiceService.generateInvoiceLink(invoiceId);
 
-        assertEquals(invoice.getPaymentLink(), invoiceLink);
+        assertEquals(invoice.getInvoiceLink(), invoiceLink.getUrl());
     }
 
     @Test
@@ -74,9 +75,9 @@ public class InvoiceServiceImplTest {
 
         when(invoiceRepository.findById(invoiceId)).thenReturn(Optional.of(invoice));
 
-        String invoiceLink = invoiceService.generateInvoiceLink(invoiceId);
+        UrlResponse invoiceLink = invoiceService.generateInvoiceLink(invoiceId);
 
-        assertEquals(existingLink, invoiceLink);
+        assertEquals(existingLink, invoiceLink.getUrl());
     }
 
     @Test

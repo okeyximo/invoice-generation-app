@@ -25,6 +25,7 @@ import java.util.UUID;
 public class Invoice extends BaseEntity{
 
     private String invoiceNumber;
+    private UUID invoiceId;
     private BigDecimal totalAmount;
     private LocalDate dueDate;
     private String invoiceLink;
