@@ -70,7 +70,7 @@ public class InvoiceServiceImplTest {
     @Test
     void testGenerateInvoiceLink_ExistingLink() {
         Long invoiceId = 1L;
-        String existingLink = "http://example.com/invoice/" + UUID.randomUUID();
+        String existingLink = "http://example.com/invoices/" + UUID.randomUUID();
         Invoice invoice = Invoice.builder().invoiceLink(existingLink).build();
 
         when(invoiceRepository.findById(invoiceId)).thenReturn(Optional.of(invoice));

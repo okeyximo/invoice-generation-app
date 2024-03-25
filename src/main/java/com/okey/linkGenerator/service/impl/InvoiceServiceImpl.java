@@ -63,7 +63,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         if (invoice.getInvoiceLink() == null) {
             UUID invoiceId =  UUID.randomUUID();
-            String link = BASE_URL + "invoice/" + invoiceId;
+            String link = BASE_URL + "invoices/" + invoiceId;
             invoice.setInvoiceLink(link);
             return UrlResponse.builder().url(link).build();
         } else {

@@ -24,7 +24,7 @@ public class PaymentServiceImpl implements PaymentService {
         Invoice invoice = invoiceRepository.findById(invoiceId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid invoice ID"));
         if (invoice.getPaymentLink() == null) {
-            String link = BASE_URL + "/payment/" + UUID.randomUUID();
+            String link = BASE_URL + "/payments/" + UUID.randomUUID();
             invoice.setPaymentLink(link);
             return UrlResponse.builder().url(link).build();
         } else {
